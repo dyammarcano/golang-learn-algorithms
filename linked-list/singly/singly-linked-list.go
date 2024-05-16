@@ -6,13 +6,15 @@ import (
 	"strings"
 )
 
-type Node struct {
+// Singly Linked List
+
+type SLLNode struct {
 	Value int
-	Next  *Node
+	Next  *SLLNode
 }
 
 type LinkedList struct {
-	Head *Node
+	Head *SLLNode
 }
 
 func NewLinkedList() *LinkedList {
@@ -20,7 +22,7 @@ func NewLinkedList() *LinkedList {
 }
 
 func (l *LinkedList) Add(value int) {
-	node := &Node{Value: value}
+	node := &SLLNode{Value: value}
 	if l.Head == nil {
 		l.Head = node
 		return
@@ -36,12 +38,10 @@ func (l *LinkedList) Remove(value int) {
 	if l.Head == nil {
 		return
 	}
-
 	if l.Head.Value == value {
 		l.Head = l.Head.Next
 		return
 	}
-
 	current := l.Head
 	for current.Next != nil {
 		if current.Next.Value == value {

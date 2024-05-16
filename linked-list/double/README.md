@@ -15,35 +15,17 @@ flowchart LR
     E --> F[Nil]
 ````
 
-## Comparison of Singly Linked Lists with Arrays & Dynamic Arrays
+## Comparison of Double Linked Lists with Arrays & Dynamic Arrays
 
 | Operation | Linked List | Array | Dynamic Array |
 | --- | --- | --- | --- |
 | Access | O(n) | O(1) | O(1) |
 | Insertion/Deletion at beginning | O(1) | O(n) | O(n) |
-| Insertion/Deletion at end | O(n) | O(1) | O(1) |
+| Insertion/Deletion at end | O(1) | O(1) | O(1) |
 | Insertion/Deletion in middle | O(n) | O(n) | O(n) |
 | Size | O(n) | O(n) | O(n) |
 
 Based on the comparison, linked lists are efficient for insertion and deletion operations but inefficient for access operations. Arrays are efficient for access operations but inefficient for insertion and deletion operations. Dynamic arrays provide a balance between access and insertion/deletion operations.
-
-## Types of Linked Lists
-
-1. **Singly Linked List**: Each node has a data field and a reference to the next node.
-2. **Doubly Linked List**: Each node has a data field, a reference to the next node, and a reference to the previous node.
-3. **Circular Linked List**: The last node points back to the first node, forming a circle.
-4. **Doubly Circular Linked List**: A combination of doubly linked list and circular linked list.
-5. **Skip List**: A linked list with multiple levels to allow for faster search operations.
-6. **Self-organizing List**: A linked list that reorders its elements based on access frequency.
-7. **Unrolled Linked List**: A linked list that stores multiple elements in each node.
-8. **XOR Linked List**: A linked list that uses bitwise XOR to store the address of the next node.
-9. **Multi-level Linked List**: A linked list with multiple levels of nodes.
-10. **Sparse Linked List**: A linked list that stores only non-null values.
-11. **Hybrid Linked List**: A linked list that combines multiple types of linked lists.
-12. **Hashed Linked List**: A linked list that uses a hash table for faster access.
-13. **Weighted Linked List**: A linked list that assigns weights to nodes for priority-based operations.
-14. **Sorted Linked List**: A linked list that maintains elements in sorted order.
-15. **Unrolled Linked List**: A linked list that stores multiple elements in each node.
 
 ## Inside Code
 
@@ -52,9 +34,10 @@ The provided code is a simple implementation of a singly linked list in Go. A li
 The Node struct is defined with two fields: Value, which holds the integer data, and Next, which is a pointer to the next node in the linked list.
 
 ```go
-type SLLNode struct {
+type DLLNode struct {
     Value int
-    Next  *SLLNode
+    Next  *DLLNode
+    Prev  *DLLNode
 }
 ```
 
@@ -62,7 +45,7 @@ The LinkedList struct is defined with a single field Head, which is a pointer to
 
 ```go
 type LinkedList struct {
-    Head *SLLNode
+    Head *DLLNode
 }
 ```
 
@@ -78,7 +61,7 @@ The Add method on the LinkedList struct adds a new node with a given value at th
 
 ```go
 func (l *LinkedList) Add(value int) {
-    node := &SLLNode{Value: value}
+    node := &DLLNode{Value: value}
     if l.Head == nil {
         l.Head = node
         return
@@ -88,6 +71,7 @@ func (l *LinkedList) Add(value int) {
         current = current.Next
     }
     current.Next = node
+    node.Prev = current
 }
 ```
 
@@ -98,18 +82,20 @@ func (l *LinkedList) Remove(value int) {
     if l.Head == nil {
         return
     }
-	if l.Head.Value == value {
-		l.Head = l.Head.Next
-		return
-	}
-	current := l.Head
-	for current.Next != nil {
-		if current.Next.Value == value {
-			current.Next = current.Next.Next
-			return
-		}
-		current = current.Next
-	}
+    if l.Head.Value == value {
+        l.Head = l.Head.Next
+        l.Head.Prev = nil
+        return
+    }
+    current := l.Head
+    for current.Next != nil {
+        if current.Next.Value == value {
+            current.Next = current.Next.Next
+            current.Next.Prev = current
+            return
+        }
+        current = current.Next
+    }
 }
 ```
 
@@ -149,5 +135,5 @@ To use the linked list implementation, you can create a new linked list with the
 The code implementing the complete linked list is in the linked-list.go file. You can run the code using the following command:
 
 ```bash
-go run singly-linked-list.go
+go run double-linked-list.go
 ```

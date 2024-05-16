@@ -2,4 +2,4 @@
 
 ## What's include:
 
-* [Linked list](linked-list/README.md)
+* [Singly Linked list](linked-list/singly/README.md)
