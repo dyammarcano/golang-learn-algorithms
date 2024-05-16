@@ -1,5 +1,8 @@
 # Double Linked list
 
+* [Introduction](../../README.md)
+* [Linked Lists](../README.md)
+
 ## How it works
 
 ````mermaid
