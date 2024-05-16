@@ -1,14 +1,14 @@
-# Singly Linked list
+# Circular Linked list
 
 ## How it works
 
 ````mermaid
 flowchart LR
-    A[[Data 1]] -.-> B[[Data 2]] 
-    B -.-> C[[Data 3]] 
-    C -.-> D[[Data 4]] 
-    D -.-> E[[Data 5]] 
-    E -.-> F[[Nil]]
+    A[[Data 1]] -.-> B[[Data 2]]
+    B -.-> C[[Data 3]]
+    C -.-> D[[Data 4]]
+    D -.-> E[[Data 5]]
+    E -.-> A
 ````
 
 ## Inside Code
@@ -18,9 +18,10 @@ The provided code is a simple implementation of a singly linked list in Go. A li
 The Node struct is defined with two fields: Value, which holds the integer data, and Next, which is a pointer to the next node in the linked list.
 
 ```go
-type SLLNode struct {
+type CLLNode struct {
     Value int
-    Next  *SLLNode
+    Next  *CLLNode
+    Prev  *CLLNode
 }
 ```
 
@@ -28,7 +29,7 @@ The LinkedList struct is defined with a single field Head, which is a pointer to
 
 ```go
 type LinkedList struct {
-    Head *SLLNode
+    Head *CLLNode
 }
 ```
 
@@ -44,7 +45,7 @@ The Add method on the LinkedList struct adds a new node with a given value at th
 
 ```go
 func (l *LinkedList) Add(value int) {
-    node := &SLLNode{Value: value}
+    node := &CLLNode{Value: value}
     if l.Head == nil {
         l.Head = node
         return
@@ -54,6 +55,7 @@ func (l *LinkedList) Add(value int) {
         current = current.Next
     }
     current.Next = node
+    node.Prev = current
 }
 ```
 
@@ -64,18 +66,20 @@ func (l *LinkedList) Remove(value int) {
     if l.Head == nil {
         return
     }
-	if l.Head.Value == value {
-		l.Head = l.Head.Next
-		return
-	}
-	current := l.Head
-	for current.Next != nil {
-		if current.Next.Value == value {
-			current.Next = current.Next.Next
-			return
-		}
-		current = current.Next
-	}
+    if l.Head.Value == value {
+        l.Head = l.Head.Next
+        l.Head.Prev = nil
+        return
+    }
+    current := l.Head
+    for current.Next != nil {
+        if current.Next.Value == value {
+            current.Next = current.Next.Next
+            current.Next.Prev = current
+            return
+        }
+        current = current.Next
+    }
 }
 ```
 
@@ -116,5 +120,5 @@ To use the linked list implementation, you can create a new linked list with the
 The code implementing the complete linked list is in the linked-list.go file. You can run the code using the following command:
 
 ```bash
-go run singly-linked-list.go
+go run circular-linked-list.go
 ```
