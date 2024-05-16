@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 // Doubly Linked List
 
 type DLLNode struct {
@@ -58,32 +62,39 @@ func (l *LinkedList) Print() {
 	}
 }
 
-func (l *LinkedList) String() string {
-	var str strings.Builder
+func (l *LinkedList) Get(index int) int {
+	if l.Head == nil {
+		return -1
+	}
+	if index == 0 {
+		return l.Head.Value
+	}
 	current := l.Head
-	for current != nil {
-		str.WriteString(strconv.Itoa(current.Value))
+	for i := 0; i < index; i++ {
 		current = current.Next
 	}
-	return str.String()
+	return current.Value
 }
 
 func main() {
-	l := NewLinkedList()
-	l.Add(1)
-	l.Add(2)
-	l.Add(3)
-	l.Add(4)
-	l.Add(5)
-	fmt.Println(l)
-	l.Remove(3)
-	fmt.Println(l)
-	l.Remove(1)
-	fmt.Println(l)
-	l.Remove(5)
-	fmt.Println(l)
-	l.Remove(2)
-	fmt.Println(l)
-	l.Remove(4)
-	fmt.Println(l)
+	// Create a new linked list
+	list := NewLinkedList()
+
+	// Add elements to the linked list
+	list.Add(1)
+	list.Add(2)
+	list.Add(3)
+	list.Add(4)
+
+	// Print the linked list
+	list.Print()
+
+	// Remove an element from the linked list
+	list.Remove(3)
+
+	// Get the value at index 1
+	fmt.Println("Value at index 1:", list.Get(1))
+
+	// Print the linked list
+	list.Print()
 }

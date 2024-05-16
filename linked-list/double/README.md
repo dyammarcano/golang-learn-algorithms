@@ -111,20 +111,21 @@ func (l *LinkedList) Print() {
 }
 ```
 
-For practical use you can replace the `Print()` method with a `String()` method that returns a string representation of the linked list.
+For practical use you can replace the `Print()` method with a `Get(index int)` method that returns a value at a given index.
 
 ```go
-func (l *LinkedList) String() string {
-    var b strings.Builder
+func (l *LinkedList) Get(index int) int {
+    if l.Head == nil {
+        return -1
+    }
+    if index == 0 {
+        return l.Head.Value
+    }
     current := l.Head
-    for current != nil {
-        b.WriteString(strconv.Itoa(current.Value))
-        if current.Next != nil {
-            b.WriteString(" -> ")
-        }
+    for i := 0; i < index; i++ {
         current = current.Next
     }
-    return b.String()
+    return current.Value
 }
 ```
 

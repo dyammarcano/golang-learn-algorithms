@@ -1,18 +1,16 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
-// Singly Linked List
+// Circular Linked List
 
-type SLLNode struct {
+type CLLNode struct {
 	Value int
-	Next  *SLLNode
+	Next  *CLLNode
 }
 
 type LinkedList struct {
-	Head *SLLNode
+	Head *CLLNode
 }
 
 func NewLinkedList() *LinkedList {
@@ -20,16 +18,18 @@ func NewLinkedList() *LinkedList {
 }
 
 func (l *LinkedList) Add(value int) {
-	node := &SLLNode{Value: value}
+	node := &CLLNode{Value: value}
 	if l.Head == nil {
 		l.Head = node
+		node.Next = node
 		return
 	}
 	current := l.Head
-	for current.Next != nil {
+	for current.Next != l.Head {
 		current = current.Next
 	}
 	current.Next = node
+	node.Next = l.Head
 }
 
 func (l *LinkedList) Remove(value int) {
@@ -41,7 +41,7 @@ func (l *LinkedList) Remove(value int) {
 		return
 	}
 	current := l.Head
-	for current.Next != nil {
+	for current.Next != l.Head {
 		if current.Next.Value == value {
 			current.Next = current.Next.Next
 			return
@@ -51,11 +51,30 @@ func (l *LinkedList) Remove(value int) {
 }
 
 func (l *LinkedList) Print() {
+	if l.Head == nil {
+		return
+	}
 	current := l.Head
-	for current != nil {
+	for {
 		fmt.Println(current.Value)
 		current = current.Next
+		if current == l.Head {
+			break
+		}
 	}
+}
+
+func (l *LinkedList) Length() int {
+	if l.Head == nil {
+		return 0
+	}
+	length := 1
+	current := l.Head
+	for current.Next != l.Head {
+		length++
+		current = current.Next
+	}
+	return length
 }
 
 func (l *LinkedList) Get(index int) int {
@@ -80,14 +99,18 @@ func main() {
 	list.Add(1)
 	list.Add(2)
 	list.Add(3)
-	list.Add(4)
-	list.Add(5)
+
+	// Print the linked list
+	list.Print()
+
+	// Get the length of the linked list
+	fmt.Println("Length:", list.Length())
 
 	// Get the value at index 1
 	fmt.Println("Value at index 1:", list.Get(1))
 
 	// Remove an element from the linked list
-	list.Remove(3)
+	list.Remove(2)
 
 	// Print the linked list
 	list.Print()
